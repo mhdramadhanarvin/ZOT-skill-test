@@ -1,0 +1,39 @@
+image: registry.gitlab.com/<USERNAME>/laravel-project:latest
+
+cache:
+  key: $CI_COMMIT_REF
+  paths:
+    - vendor/ 
+    
+stages: 
+  - test
+  - deploy 
+
+unit-test:
+  stage: test
+  services:
+    - name: mysql:5.7
+  variables:
+    MYSQL_DATABASE: laravel
+    MYSQL_ROOT_PASSWORD: secret1010
+    DB_HOST: mysql
+    DB_USERNAME: root
+  script: 
+    - cp .env.example .env
+    - composer install
+    - php artisan key:generate
+    - php artisan migrate
+    - vendor/bin/phpunit --log-junit report.xml  
+  artifacts:
+    when: always
+    reports:
+      junit: report.xml 
+
+deploy-to-server: 
+  stage: deploy 
+  script:
+    - echo "upload to S3"
+    - zip -r "$AWS_S3_OBJECT_NAME" * .[^.]* -x "*.git*"
+    - aws s3 cp $AWS_S3_OBJECT_NAME $AWS_S3_BUCKET_TARGET
+  only:
+    - master 
