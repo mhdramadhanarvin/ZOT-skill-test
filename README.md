@@ -2,7 +2,7 @@
 
 
 ## Bonus Problem 1
-Provide resource on container orchestration using IaC (Infrastructure as Code). In this 
+Provide resources on container orchestration using IaC (Infrastructure as Code). Here I use Terraform to create a Cloud Run Hello-World service and deploy it.
 
 ## Bonus Problem 2 
 Create a CI task to run unit-tests and a CD task for deployment services. In this case I'll be using Gitlab CI as the tool to run the job so I'm just attaching one `.gitlab-ci.yml` file as the job configuration. Before trying this configuration, first prepare some CI/CD Variables:
